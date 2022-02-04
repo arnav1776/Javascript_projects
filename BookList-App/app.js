@@ -43,6 +43,19 @@ class UI {
 
         list.appendChild(row);
     }
+
+    static deleteBook(el) {
+        if(el.classList.contains('delete')) {
+            el.parentElement.parentElement.remove();
+        }        
+    }
+
+    static clearFields() {
+        document.querySelector('#title').value = '';
+        document.querySelector('#author').value = '';
+        document.querySelector('#isbn').value = '';
+
+    }
 }
 
 // Storage Class: Haandles Storage
@@ -50,3 +63,27 @@ class UI {
 // Event: Display Books
 
 document.addEventListener('DOMContentLoaded', UI.displayBooks);
+
+// Event: Add a book
+document.querySelector('#book-form').addEventListener('submit', (e)=> {
+    e.preventDefault();
+
+    // Get form values
+    const title = document.querySelector('#title').value;
+    const author = document.querySelector('#author').value;
+    const isbn = document.querySelector('#isbn').value;
+
+    const book = new Book(title, author, isbn);
+
+    // Add book to UI
+    UI.addBookToList(book);
+
+    // Clear Fields
+    UI.clearFields();
+});
+
+// Event: Remove a book
+
+document.querySelector('#book-list').addEventListener('click', (e)=> {
+    UI.deleteBook(e.target);
+});
