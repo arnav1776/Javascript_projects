@@ -9,7 +9,6 @@ function init(){
   body.appendChild(leftDiv);
   body.appendChild(rightDiv);
 
-
   var textArea=document.createElement("textarea");
   textArea.setAttribute("placeholder","I need to");
   textArea.setAttribute("class","textBox");
@@ -17,11 +16,11 @@ function init(){
   rightDiv.appendChild(textArea);
 
   var leftHeading=document.createElement("h1");
-  leftHeading.innerText="TASK LIST";
+  leftHeading.innerText="Task List";
   leftDiv.appendChild(leftHeading);
 
   var subHeading=document.createElement("h4");
-  subHeading.innerHTML="<br>Add tasks to the list by typing to the right side and pressing enter. You may then view pending tasks below.";
+  subHeading.innerHTML="<br>Add tasks to the list by typing to the right side and pressing enter. You may then view pending tasks below..";
   leftDiv.appendChild(subHeading);
 
   var box=document.createElement("div");
@@ -60,7 +59,7 @@ function displayData(){
           line.style.display="none";
           checkBox.checked=false;
         }
-        checkBox.setAttribute("onClick",`BoxCheak(${index})`);
+        checkBox.setAttribute("onClick",`BoxCheck(${index})`);
         checkBox.setAttribute("type","checkbox");
 
         var edit=document.createElement("button");
@@ -71,7 +70,7 @@ function displayData(){
 
         var deleteBtn=document.createElement("button");
         deleteBtn.setAttribute("id",index);
-        deleteBtn.setAttribute("onClick","delbtn(this.id)")
+        deleteBtn.setAttribute("onClick","dltbtn(this.id)")
         deleteBtn.setAttribute("class","deleteBtn");
         deleteBtn.innerHTML="<h4>X</h4>";
 
@@ -107,16 +106,28 @@ getTextArea.addEventListener("keyup",function(e){
     }
     list.push(obj);
     localStorage.setItem("tasks",JSON.stringify(list));
-    showData();
+    displayData();
   
   getTextArea.value=" ";
   }else{
-    console.log("Try again");
+    console.log("Try Again");
   }
  
 })
 
 
+function dltbtn(index){
+  var item=localStorage.getItem("tasks");
+  if(item===null){
+    listit=[];
+  }else{
+    listit=JSON.parse(item);
+    listit.splice(index,1);
+    console.log(listit);
+    localStorage.setItem("tasks",JSON.stringify(listit));
+  }
+  displayData();  
+}
 
 function BoxCheck(index){
    var items=JSON.parse(localStorage.getItem("tasks"));
@@ -131,16 +142,16 @@ function BoxCheck(index){
       list[index].check=true;
     }
     localStorage.setItem("tasks",JSON.stringify(list));
-    showData();
+    displayData();
 }
-
 
 function editbtn(index){
   var container=document.getElementsByClassName("container");
 
   container[index].innerHTML=`<textarea name="editText" id="editText" cols="30" rows="2" onblur="editText(${index})" placeholder="Edit the Task"></textarea>`;
+  
+  
 }
-
 function editText(index){
     var items=JSON.parse(localStorage.getItem("tasks"));
     if(items===null){
@@ -154,15 +165,5 @@ function editText(index){
     displayData();
   }
 
-function delbtn(index){
-    var item=localStorage.getItem("tasks");
-    if(item===null){
-      listit=[];
-    }else{
-      listit=JSON.parse(item);
-      listit.splice(index,1);
-      console.log(listit);
-      localStorage.setItem("tasks",JSON.stringify(listit));
-    }
-    displayData();  
-}
+
+
